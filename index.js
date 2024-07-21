@@ -4,15 +4,33 @@ const PORT = 3000;
 
 const server = http.createServer();
 
+const friends = [
+  {
+    id: 0,
+    name: 'Sir Isaac Newton',   
+  },
+  {
+    id: 1,
+    name: 'Nikola Tesla',   
+  },
+  {
+    id: 2,
+    name: 'Albert Einstein',   
+  },
+];
+
 server.on('request', (req, res) => {
-  if (req.url === '/friends') {
-    res.end(JSON.stringify({
-      id: 1,
-      name: 'Sir Isaac Newton'
-    }));
+  const items = req.url.split('/');
+  if (items[1] === 'friends') {
     res.statusCode = 200;
-    res.setHeader('Conten-Type', 'application/json');    
-  } else if (req.url === '/messages') {
+    res.setHeader('Conten-Type', 'application/json');
+    if (items.length === 3) {
+      const friendsIndex = Number(items[2]);
+      res.end(JSON.stringify(friends[friendsIndex]));
+    } else {
+      res.end(JSON.stringify(friends));
+    }    
+  } else if (items[1] === 'messages') {
     res.setHeader('Content-Type', 'text/html');
     res.write('<html>');
     res.write('<body>');
